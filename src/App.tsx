@@ -1,7 +1,8 @@
-import "./App.css";
+import { useTheme } from "./providers/theme-provider";
 
 function App() {
-  return <div className="bg-red-400">hello</div>;
+  const { setTheme } = useTheme();
+  return <div onClick={() => setTheme("light")}>hello</div>;
 }
 
 export default App;
