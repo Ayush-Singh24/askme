@@ -35,7 +35,6 @@ The output must be a JSON array that follows this schema: ${jsonSchema}`,
     throw new Error("Error while generating");
   }
 
-  return JSON.parse(
-    chat_completion.choices[0].message.content,
-  ) as QuizQuestion[];
+  return JSON.parse(chat_completion.choices[0].message.content)
+    .items as QuizQuestion[];
 }
