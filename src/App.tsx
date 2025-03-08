@@ -4,7 +4,6 @@ import { Button } from "./components/ui/button";
 import { generateQuiz } from "./lib/services";
 import type { QuizQuestion } from "./lib/types";
 import QuestionCard from "./components/QuesetionCard";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 function App() {
   const [input, setInput] = useState("");
@@ -12,7 +11,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasGenerated, setHasGenerated] = useState(false);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const [userAnswers, setUserAnswers] = useState<(string | null)[]>([]);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
@@ -32,7 +30,6 @@ function App() {
       setInput("");
       setHasGenerated(true);
 
-      setCurrentQuestionIndex(0);
       setUserAnswers(new Array(questions.length).fill(null));
       setAnsweredQuestions(new Array(questions.length).fill(false));
       setScore(0);
@@ -44,31 +41,19 @@ function App() {
     }
   };
 
-  const handleAnswer = (selectedOption: string) => {
-    if (answeredQuestions[currentQuestionIndex]) return;
+  const handleAnswer = (questionIndex: number, selectedOption: string) => {
+    if (answeredQuestions[questionIndex]) return;
 
     const newUserAnswers = [...userAnswers];
-    newUserAnswers[currentQuestionIndex] = selectedOption;
+    newUserAnswers[questionIndex] = selectedOption;
     setUserAnswers(newUserAnswers);
 
     const newAnsweredQuestions = [...answeredQuestions];
-    newAnsweredQuestions[currentQuestionIndex] = true;
+    newAnsweredQuestions[questionIndex] = true;
     setAnsweredQuestions(newAnsweredQuestions);
 
-    if (selectedOption === quiz[currentQuestionIndex].answer) {
+    if (selectedOption === quiz[questionIndex].answer) {
       setScore((prevScore) => prevScore + 1);
-    }
-  };
-
-  const goToNextQuestion = () => {
-    if (currentQuestionIndex < quiz.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
-  };
-
-  const goToPrevQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
 
@@ -106,38 +91,39 @@ function App() {
             ) : (
               quiz.length > 0 && (
                 <div className="space-y-6">
-                  <div className="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm border">
-                    <div className="text-sm text-gray-600">
-                      Question {currentQuestionIndex + 1} of {quiz.length}
-                    </div>
-                    <div className="font-medium">
-                      Score: {score}/{quiz.length}
+                  <div className="sticky top-0 z-20 pb-2">
+                    <div className="bg-white p-3 rounded-lg shadow-sm border flex justify-between items-center">
+                      <div className="text-sm text-gray-600">
+                        {quiz.length} Questions
+                      </div>
+                      <div className="font-medium">
+                        Score: {score}/
+                        {answeredQuestions.filter(Boolean).length} answered
+                      </div>
                     </div>
                   </div>
-                  <QuestionCard
-                    question={quiz[currentQuestionIndex]}
-                    questionIndex={currentQuestionIndex}
-                    onAnswer={handleAnswer}
-                    userSelection={userAnswers[currentQuestionIndex]}
-                    answered={answeredQuestions[currentQuestionIndex]}
-                  />
-                  <div className="flex justify-between pt-2">
-                    <Button
-                      onClick={goToPrevQuestion}
-                      disabled={currentQuestionIndex === 0}
-                      variant="outline"
-                      className="flex items-center gap-1"
-                    >
-                      <ChevronLeft size={16} /> Previous
-                    </Button>
-                    <Button
-                      onClick={goToNextQuestion}
-                      disabled={currentQuestionIndex === quiz.length - 1}
-                      variant="outline"
-                      className="flex items-center gap-1"
-                    >
-                      Next <ChevronRight size={16} />
-                    </Button>
+
+                  <div className="space-y-8">
+                    {quiz.map((question, index) => (
+                      <div
+                        key={index}
+                        className="scroll-mt-4"
+                        id={`question-${index}`}
+                      >
+                        <div className="text-sm text-gray-600 mb-2 px-1">
+                          Question {index + 1}
+                        </div>
+                        <QuestionCard
+                          question={question}
+                          questionIndex={index}
+                          onAnswer={(selectedOption) =>
+                            handleAnswer(index, selectedOption)
+                          }
+                          userSelection={userAnswers[index]}
+                          answered={answeredQuestions[index]}
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
               )
