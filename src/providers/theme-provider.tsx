@@ -20,8 +20,10 @@ const ThemeProviderContext = createContext<ThemeContextInterface | undefined>(
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const storedTheme = localStorage.getItem("askme-ui-theme") as ThemeType;
   const [theme, setTheme] = useState<ThemeType>(
-    storedTheme === "dark" || storedTheme === "light" ? storedTheme : "dark",
+    storedTheme === "dark" || storedTheme === "light" ? storedTheme : "light",
   );
+
+  console.log(theme);
 
   useEffect(() => {
     localStorage.setItem("askme-ui-theme", theme);
