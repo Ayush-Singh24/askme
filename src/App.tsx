@@ -5,6 +5,7 @@ import { generateQuiz } from "./lib/services";
 import type { QuizQuestion } from "./lib/types";
 import QuestionCard from "./components/QuesetionCard";
 import SkeletonLoading from "./components/SkeletonLoading";
+import Spinner from "./components/ui/spinner";
 
 function App() {
   const [input, setInput] = useState("");
@@ -139,10 +140,10 @@ function App() {
             />
             <Button
               onClick={handleGenerate}
-              className="self-end"
+              className="self-end w-16"
               disabled={loading}
             >
-              {loading ? "Generating..." : "Ask"}
+              {loading ? <Spinner /> : "Ask"}
             </Button>
           </div>
         </div>
