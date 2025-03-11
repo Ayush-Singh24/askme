@@ -23,8 +23,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     storedTheme === "dark" || storedTheme === "light" ? storedTheme : "light",
   );
 
-  console.log(theme);
-
   useEffect(() => {
     localStorage.setItem("askme-ui-theme", theme);
     document.documentElement.className = theme;

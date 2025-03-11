@@ -26,7 +26,6 @@ function App() {
       setLoading(true);
       setError(null);
       const questions = await generateQuiz(input);
-      console.log(questions);
       setQuiz(questions);
       setInput("");
       setHasGenerated(true);
