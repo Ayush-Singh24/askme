@@ -59,10 +59,10 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex-1 overflow-auto p-4 bg-gray-50">
+    <div className="flex flex-col">
+      <div className="flex-1 overflow-auto bg-gray-50">
         {!hasGenerated && !loading ? (
-          <div className="h-full flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center h-screen">
             <div className="flex items-center gap-1 mb-6">
               <h1 className="text-8xl font-aftersmile">Ask</h1>
               <span className="text-8xl font-aftersmile logo-background text-transparent">
@@ -74,7 +74,7 @@ function App() {
             </p>
           </div>
         ) : (
-          <div className="max-w-3xl mx-auto py-6">
+          <div className="max-w-3xl mx-auto px-4 py-8 mb-20">
             {loading ? (
               <div className="space-y-8">
                 <div className="bg-white p-3 rounded-lg shadow-sm border flex justify-between items-center">
@@ -127,7 +127,7 @@ function App() {
           </div>
         )}
       </div>
-      <div className="border-t bg-white p-4">
+      <div className="border-t bg-white p-4 fixed w-full bottom-0">
         <div className="max-w-3xl mx-auto">
           {error && <p className="text-red-500 text-center mb-2">{error}</p>}
           <div className="flex gap-2">
